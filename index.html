@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Placement Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #232f3e; /* AWS Dark Blue */
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff9900; /* AWS Orange */
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e08800;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Student Placement Tracker</h1>
+    <p style="text-align: center; color: #666;">Milestone 1: Local Frontend Testing</p>
+    <hr>
+    
+    <form id="trackerForm" onsubmit="event.preventDefault(); 
+        <div class="form-group">
+            <label for="companyName">Company Name</label>
+            <input type="text" id="companyName" placeholder="e.g., Amazon, TCS, Infosys" required>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Application Status</label>
+            <select id="status">
+                <option value="Applied">Applied</option>
+                <option value="Aptitude Test">Aptitude Test</option>
+                <option value="Technical Interview">Technical Interview</option>
+                <option value="HR Interview">HR Interview</option>
+                <option value="Offered">Offered</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Interview Experiences / Notes</label>
+            <textarea id="notes" rows="4" placeholder="Type key topics asked, preparation focus, or dates here..."></textarea>
+        </div>
+
+        <button type="submit">Save Application</button>
+    </form>
+</div>
+<script>
+    document.getElementById('trackerForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // 1. Gather data from your form fields
+        const companyName = document.getElementById('companyName').value;
+        const status = document.getElementById('status').value;
+        const notes = document.getElementById('notes').value;
+
+        // 2. Point this directly to your running Amazon EC2 backend server
+        const API_URL = 'http://15.135.159.219:3000/api/applications';
+
+        try {
+            // 3. Shoot the data over the internet!
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ companyName, status, notes })
+            });
+
+            const data = await response.json();
+            
+            if (data.status === 'Success') {
+                alert('Success! Application tracked successfully in the AWS Cloud!');
+                document.getElementById('trackerForm').reset();
+            } else {
+                alert('Backend responded, but there was an issue processing data.');
+            }
+        } catch (error) {
+            console.error('Error connecting to backend:', error);
+            alert('Could not reach the EC2 Backend Server. Make sure your server is running!');
+        }
+    });
+</script>
+</body>
+</html>
