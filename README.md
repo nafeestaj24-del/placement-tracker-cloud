@@ -1,4 +1,4 @@
-Student Placement Tracker (Full-Stack AWS Cloud Application)
+Student Placement Tracker (Cloud-Hosted Two-Tier Web Application)
 
 A decoupled full-stack tracking application designed to streamline and monitor student corporate assessment workflows and application statuses.
 
